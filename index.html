@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nightmare - Igrzyska Śmierci</title>
+
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="hero">
+    <div class="overlay"></div>
+
+    <div class="hero-content">
+
+        <img src="images/logo.png" class="logo">
+
+        <p class="subtitle">⚔ TRZY DNI WALKI • JEDEN ZWYCIĘZCA • ZERO LITOŚCI ⚔</p>
+
+        <a href="#intro" class="button">Rozpocznij podróż</a>
+
+        <div class="start-wrapper">
+            <div class="start-title">START ZA</div>
+
+            <div class="countdown big">
+                <div class="unit"><div class="time" id="days">0</div><div class="label">DNI</div></div>
+                <div class="unit"><div class="time" id="hours">00</div><div class="label">GODZ</div></div>
+                <div class="unit"><div class="time" id="minutes">00</div><div class="label">MIN</div></div>
+                <div class="unit"><div class="time" id="seconds">00</div><div class="label">SEK</div></div>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<section id="intro">
+    <h2>Witaj na Nightmare</h2>
+
+    <p>
+        Nightmare to 3-dniowe Igrzyska Śmierci.<br>
+        Każdy gracz walczy o przetrwanie bez sojuszy i bez litości.
+    </p>
+</section>
+
+<!-- START EDYCJI -->
+<section class="timeline">
+
+    <h2>Start edycji</h2>
+
+    <div class="grid">
+
+        <div class="step">
+            <div class="card">
+                <h3>Lobby</h3>
+                <p>Oczekiwanie na odliczanie</p>
+            </div>
+            <div class="arrow">→</div>
+        </div>
+
+        <div class="step">
+            <div class="card">
+                <h3>Odliczanie</h3>
+                <p>Oczekiwanie na odliczanie</p>
+            </div>
+            <div class="arrow">→</div>
+        </div>
+
+        <div class="step">
+            <div class="card">
+                <h3>Teleportacja</h3>
+                <p>Przeniesienie na mapę igrzysk</p>
+            </div>
+            <div class="arrow">→</div>
+        </div>
+
+        <div class="step">
+            <div class="card">
+                <h3>Start</h3>
+                <p>Końcowe odliczanie, start Igrzysk</p>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- MECHANIKI (IKONKI TWOJE ZOSTAJĄ) -->
+<section>
+
+    <h2>Mechaniki</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <img src="images/chest.webp" class="icon">
+            <h3>Zrzuty</h3>
+            <p>Losowe dropy na mapie.</p>
+        </div>
+
+        <div class="card">
+            <img src="images/blaze.webp" class="icon">
+            <h3>Pióro Feniksa</h3>
+            <p>Wskrzeszenie gracza.</p>
+        </div>
+
+        <div class="card">
+            <img src="images/wieza.png" class="icon">
+            <h3>Twierdze</h3>
+            <p>Struktury dostępne o danej porze</p>
+        </div>
+
+        <div class="card">
+            <img src="images/boss.webp" class="icon">
+            <h3>Bossy</h3>
+            <p>Legendarny loot.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section>
+    <h2>Komendy</h2>
+
+    <div class="command copy" data-cmd="/hg menu"><code>/hg menu</code>  Menu Igrzysk</div>
+    <div class="command copy" data-cmd="/hg join"><code>/hg join</code>  Dołączenie na Igrzyska</div>
+    <div class="command copy" data-cmd="/d"><code>/d</code>  Czat Dystryktu</div>
+</section>
+
+<section class="warning">
+    <h2>Zakaz sojuszy</h2>
+    <p>Sojusze są zabronione. Liczy się tylko przetrwanie.</p>
+</section>
+
+<footer>
+    <h2>Każda decyzja ma znaczenie</h2>
+</footer>
+
+<div class="copy-msg"></div>
+
+<script>
+function getNextFriday1900(){
+    const now=new Date();
+    const r=new Date();
+    const d=now.getDay();
+    const diff=(5-d+7)%7;
+
+    r.setDate(now.getDate()+diff);
+    r.setHours(19,0,0,0);
+
+    if(r<=now) r.setDate(r.getDate()+7);
+    return r;
+}
+
+const target=getNextFriday1900();
+
+function update(){
+    const now=Date.now();
+    const dist=target-now;
+
+    document.getElementById("days").innerText=Math.floor(dist/86400000);
+    document.getElementById("hours").innerText=String(Math.floor(dist%86400000/3600000)).padStart(2,'0');
+    document.getElementById("minutes").innerText=String(Math.floor(dist%3600000/60000)).padStart(2,'0');
+    document.getElementById("seconds").innerText=String(Math.floor(dist%60000/1000)).padStart(2,'0');
+}
+
+setInterval(update,1000);
+update();
+
+/* COPY SYSTEM */
+document.querySelectorAll(".command.copy").forEach(e=>{
+    e.onclick=()=>{
+        navigator.clipboard.writeText(e.dataset.cmd);
+        const m=document.querySelector(".copy-msg");
+        m.textContent="Skopiowano: "+e.dataset.cmd;
+        m.classList.add("show");
+        setTimeout(()=>m.classList.remove("show"),1500);
+    };
+});
+</script>
+
+</body>
+</html>
